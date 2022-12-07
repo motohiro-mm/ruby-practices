@@ -34,7 +34,6 @@ frames.push(last_frame)
 # 全てのフレームをナンバリング
 numbers = [*1..10]
 result = [numbers, frames].transpose.to_h
-p result
 
 # 点数計算
 point = 0
