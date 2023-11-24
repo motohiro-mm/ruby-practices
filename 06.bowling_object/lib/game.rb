@@ -7,15 +7,16 @@ class Game
   end
 
   def self.group_by_frame(marks)
-    frames = Array.new(10) { [] }
-    frames.each.with_index do |frame, i|
-      if i == 9
-        frame.concat(marks)
-      elsif marks[0] == 'X'
-        frame.push(marks.shift)
-      else
-        2.times { frame.push(marks.shift) }
-      end
+    frames = []
+    10.times do |i|
+      frames <<
+        if i == 9
+          marks
+        elsif marks[0] == 'X'
+          [marks.shift]
+        else
+          marks.shift(2)
+        end
     end
     frames
   end
