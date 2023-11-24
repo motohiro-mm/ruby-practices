@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
 class Frame
-  attr_reader :first_shot, :second_shot, :third_shot
+  attr_reader :first_shot_score, :second_shot_score, :third_shot_score
 
   def initialize(shots)
     @first_shot = Shot.new(shots[0])
-    @second_shot = Shot.new(shots[1])
-    @third_shot = Shot.new(shots[2])
+    @first_shot_score = @first_shot.score
+    @second_shot_score = Shot.new(shots[1]).score
+    @third_shot_score = Shot.new(shots[2]).score
   end
 
   def sum_shots_score
-    first_shot.score + second_shot.score + third_shot.score
+    first_shot_score + second_shot_score + third_shot_score
   end
 
   def strike?
-    first_shot.mark == 'X'
+    @first_shot.mark == 'X'
   end
 
   def spare?

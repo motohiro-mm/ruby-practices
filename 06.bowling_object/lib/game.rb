@@ -36,7 +36,7 @@ class Game
       elsif frame.strike?
         calculate_strike_bonus(@frames, i)
       elsif frame.spare?
-        @frames[i + 1].first_shot.score
+        @frames[i + 1].first_shot_score
       else
         0
       end
@@ -45,9 +45,9 @@ class Game
 
   def calculate_strike_bonus(frames, index)
     if index == 8 || !frames[index + 1].strike?
-      frames[index + 1].first_shot.score + frames[index + 1].second_shot.score
+      frames[index + 1].first_shot_score + frames[index + 1].second_shot_score
     else
-      10 + frames[index + 2].first_shot.score
+      10 + frames[index + 2].first_shot_score
     end
   end
 end
