@@ -7,18 +7,15 @@ class Game
   end
 
   def self.group_by_frame(marks)
-    frames = []
-    10.times do |i|
-      frames <<
-        if i == 9
-          marks
-        elsif marks[0] == 'X'
-          [marks.shift]
-        else
-          marks.shift(2)
-        end
+    10.times.map do |i|
+      if i == 9
+        marks
+      elsif marks[0] == 'X'
+        [marks.shift]
+      else
+        marks.shift(2)
+      end
     end
-    frames
   end
 
   def total_score
