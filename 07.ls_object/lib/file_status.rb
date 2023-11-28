@@ -7,8 +7,4 @@ class FileStatus
     @name = File.basename(path)
     @stat = File.lstat(path)
   end
-
-  def hidden_file?
-    @name =~ /^\./
-  end
 end

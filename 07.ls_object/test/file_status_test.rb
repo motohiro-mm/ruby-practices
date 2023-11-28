@@ -17,9 +17,4 @@ class FileStatusTest < Minitest::Test
   def test_file_stat
     assert_instance_of File::Stat, @fizzbuzz.stat
   end
-
-  def test_hidden_file?
-    assert @gitignore.hidden_file?
-    refute @fizzbuzz.hidden_file?
-  end
 end
