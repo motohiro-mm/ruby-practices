@@ -71,8 +71,9 @@ class LsCommand
   end
 
   def file_width(files)
-    filename_lengths = files.map(&:length)
-    (filename_lengths.max.to_f / 8).ceil * 8
+    filename_length_max = files.map(&:length).max
+    filename_length_max += 1 if (filename_length_max % 8).zero?
+    (filename_length_max.to_f / 8).ceil * 8
   end
 
   MAX_COLUMN = 3
