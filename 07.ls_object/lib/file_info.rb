@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-require 'etc'
+
 require 'date'
+require 'etc'
 
 class FileInfo
   attr_reader :name, :stat
@@ -17,8 +18,8 @@ class FileInfo
       user_name: Etc.getpwuid(@stat.uid).name,
       group_name: Etc.getgrgid(@stat.gid).name,
       size: @stat.size.to_s,
-      update_time: file_update_time
-    }
+      update_time: file_update_time,
+      name: @name }
   end
 
   FILE_TYPE = { 'file' => '-', 'directory' => 'd', 'link' => 'l', 'fifo' => 'p', 'characterSpecial' => 'c', 'blockSpecial' => 'b', 'socket' => 's' }.freeze

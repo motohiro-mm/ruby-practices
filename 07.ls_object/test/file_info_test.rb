@@ -19,10 +19,24 @@ class FileStatusTest < Minitest::Test
   end
 
   def test_file_status
-    fizzbuzz_status = { block: 0, mode: "drwxr-xr-x", link: "4", user_name: "omisan", group_name: "staff", size: "128", update_time: " 3 28  2023"}
+    fizzbuzz_status = { block: 0,
+                        mode: 'drwxr-xr-x',
+                        link: '4',
+                        user_name: 'omisan',
+                        group_name: 'staff',
+                        size: '128',
+                        update_time: ' 3 28  2023',
+                        name: '01.fizzbuzz' }
     assert_equal fizzbuzz_status, @fizzbuzz.status
 
-    gitignore_status = { block: 8, mode: "-rw-r--r--", link: "1", user_name: "omisan", group_name: "staff", size: "2099", update_time: "12 11 13:02"}
+    gitignore_status = { block: 8,
+                         mode: '-rw-r--r--',
+                         link: '1',
+                         user_name: 'omisan',
+                         group_name: 'staff',
+                         size: '2099',
+                         update_time: '12 11 13:02',
+                         name: '.gitignore' }
     assert_equal gitignore_status, @gitignore.status
   end
 end

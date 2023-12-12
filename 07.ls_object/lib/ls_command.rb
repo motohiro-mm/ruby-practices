@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'file_info'
 
 class LsCommand
@@ -22,30 +23,29 @@ class LsCommand
   end
 
   def ls_with_l_option
-    files_status = @path_names.map { |path_name| FileInfo.new(path_name).status}
-    max_length_stats = [:link, :user_name, :group_name, :size].map { |key| max_length_stat(files_status, key) }
+    files_status = @path_names.map { |path_name| FileInfo.new(path_name).status }
+    max_length_stats = %i[link user_name group_name size].map { |key| max_length_stat(files_status, key) }
     "total #{sum_block(files_status)}\n" + format_files_status(files_status, max_length_stats)
   end
 
   def max_length_stat(files_status, key)
-    key_status = files_status.map { |file_status| file_status[key].length }
-    key_status.max
+    key_lengths = files_status.map { |file_status| file_status[key].length }
+    key_lengths.max
   end
 
   def sum_block(files_status)
     files_status.map { |file_status| file_status[:block] }.sum
   end
 
-
   def format_files_status(files_status, max_length_stats)
-    files_status.map.with_index do |file_status, i|
-      [ file_status[:mode],
-        file_status[:link].rjust(max_length_stats[0]+1),
-        file_status[:user_name].rjust(max_length_stats[1]),
-        file_status[:group_name].rjust(max_length_stats[2]+1),
-        file_status[:size].rjust(max_length_stats[3]+1),
-        file_status[:update_time],
-        @file_names[i] ].join(' ')
+    files_status.map do |file_status|
+      [file_status[:mode],
+       file_status[:link].rjust(max_length_stats[0] + 1),
+       file_status[:user_name].rjust(max_length_stats[1]),
+       file_status[:group_name].rjust(max_length_stats[2] + 1),
+       file_status[:size].rjust(max_length_stats[3] + 1),
+       file_status[:update_time],
+       file_status[:name]].join(' ')
     end.join("\n")
   end
 
@@ -55,7 +55,7 @@ class LsCommand
     transposed_files.map! do |transposed_file|
       transposed_file.map! do |file|
         if file == transposed_file[-1]
-          file.ljust(filename_width, ' ') + "\n"
+          "#{file}\n"
         else
           file.ljust(filename_width, ' ')
         end
@@ -67,12 +67,12 @@ class LsCommand
     files_count = @file_names.count
     lines = (files_count.to_f / files_column(@file_names, terminal_width)).ceil
     separated_files = @file_names.each_slice(lines).to_a
-    separated_files[0].zip(*separated_files[1..-1]).map(&:compact)
+    separated_files[0].zip(*separated_files[1..]).map(&:compact)
   end
 
   def file_width(files)
     filename_lengths = files.map(&:length)
-    (filename_lengths.max.to_f/8).ceil*8
+    (filename_lengths.max.to_f / 8).ceil * 8
   end
 
   MAX_COLUMN = 3
