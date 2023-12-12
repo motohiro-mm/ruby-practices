@@ -6,20 +6,20 @@ require_relative '../lib/file_info'
 
 class LsCommandTest < Minitest::Test
   def setup
-    options = { a: false, l: false, r: false }
-    @ls_command = LsCommand.new('..', options)
+    options = {'a'=>false, 'l'=>false, 'r'=>false}
+    @ls_command = LsCommand.new(options, '..')
 
-    l_option = { a: false, l: true, r: false }
-    @ls_command_with_l = LsCommand.new('..', l_option)
-    @ls_command_06bowling_with_l = LsCommand.new('../06.bowling_object', l_option)
+    l_option = {'a'=>false, 'l'=>true, 'r'=>false}
+    @ls_command_with_l = LsCommand.new(l_option, '..')
+    @ls_command_06bowling_with_l = LsCommand.new(l_option, '../06.bowling_object')
   end
 
   def test_ls_command_files
-    a_option = { a: true, l: false, r: false }
-    assert_equal ['.', '..', '.gitkeep', 'fizzbuzz.rb'], LsCommand.new('../01.fizzbuzz', a_option).file_names
+    a_option = {'a'=>true, 'l'=>false, 'r'=>false}
+    assert_equal ['.', '..', '.gitkeep', 'fizzbuzz.rb'], LsCommand.new(a_option, '../01.fizzbuzz').file_names
 
-    a_r_options = { a: true, l: false, r: true }
-    assert_equal ['fizzbuzz.rb', '.gitkeep', '..', '.'], LsCommand.new('../01.fizzbuzz', a_r_options).file_names
+    a_r_options = {'a'=>true, 'l'=>false, 'r'=>true}
+    assert_equal ['fizzbuzz.rb', '.gitkeep', '..', '.'], LsCommand.new(a_r_options, '../01.fizzbuzz').file_names
   end
 
   def test_ls_files_without_l_terminal_width_86

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
-require 'debug'
+require_relative 'file_info'
 
 class LsCommand
   attr_reader :file_names
 
-  def initialize(path, options)
+  def initialize(options, path)
     @options = options
     @path_names = get_path_names_with_a_or_r_option(path)
     @file_names = @path_names.map { |path_name| File.basename(path_name) }
@@ -12,16 +12,16 @@ class LsCommand
 
   def get_path_names_with_a_or_r_option(path)
     pathname = "#{path}/*"
-    path_names = @options[:a] ? Dir.glob(pathname, File::FNM_DOTMATCH).push("#{path}/..").sort : Dir.glob(pathname).sort
-    path_names.reverse! if @options[:r]
+    path_names = @options['a'] ? Dir.glob(pathname, File::FNM_DOTMATCH).push("#{path}/..").sort : Dir.glob(pathname).sort
+    path_names.reverse! if @options['r']
     path_names
   end
 
   def ls_files(terminal_width)
-    @options[:l] ? ls_with_l_option(terminal_width) : ls_without_l_option(terminal_width)
+    @options['l'] ? ls_with_l_option : ls_without_l_option(terminal_width)
   end
 
-  def ls_with_l_option(terminal_width)
+  def ls_with_l_option
     files_status = @path_names.map { |path_name| FileInfo.new(path_name).status}
     max_length_stats = [:link, :user_name, :group_name, :size].map { |key| max_length_stat(files_status, key) }
     "total #{sum_block(files_status)}\n" + format_files_status(files_status, max_length_stats)
@@ -65,7 +65,6 @@ class LsCommand
 
   def transpose_files(terminal_width)
     files_count = @file_names.count
-    files_column(@file_names, terminal_width)
     lines = (files_count.to_f / files_column(@file_names, terminal_width)).ceil
     separated_files = @file_names.each_slice(lines).to_a
     separated_files[0].zip(*separated_files[1..-1]).map(&:compact)
