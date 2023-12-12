@@ -1,28 +1,56 @@
 # frozen_string_literal: true
+require 'debug'
 
 class LsCommand
-  attr_reader :files
+  attr_reader :file_names
 
   def initialize(path, options)
     @options = options
-    @files = get_files_with_a_or_r_option(path)
+    @path_names = get_path_names_with_a_or_r_option(path)
+    @file_names = @path_names.map { |path_name| File.basename(path_name) }
   end
 
-  def get_files_with_a_or_r_option(path)
-    files = @options[:a] ? Dir.foreach(path).to_a.sort : Dir.glob('*', base: path).sort
-    files.reverse! if @options[:r]
-    files
+  def get_path_names_with_a_or_r_option(path)
+    pathname = "#{path}/*"
+    path_names = @options[:a] ? Dir.glob(pathname, File::FNM_DOTMATCH).push("#{path}/..").sort : Dir.glob(pathname).sort
+    path_names.reverse! if @options[:r]
+    path_names
   end
 
   def ls_files(terminal_width)
-    @options[:l] ? ls_with_l_option : ls_without_l_option(terminal_width)
+    @options[:l] ? ls_with_l_option(terminal_width) : ls_without_l_option(terminal_width)
   end
 
-  def ls_with_l_option
+  def ls_with_l_option(terminal_width)
+    files_status = @path_names.map { |path_name| FileInfo.new(path_name).status}
+    max_length_stats = [:link, :user_name, :group_name, :size].map { |key| max_length_stat(files_status, key) }
+    "total #{sum_block(files_status)}\n" + format_files_status(files_status, max_length_stats)
+  end
+
+  def max_length_stat(files_status, key)
+    key_status = files_status.map { |file_status| file_status[key].length }
+    key_status.max
+  end
+
+  def sum_block(files_status)
+    files_status.map { |file_status| file_status[:block] }.sum
+  end
+
+
+  def format_files_status(files_status, max_length_stats)
+    files_status.map.with_index do |file_status, i|
+      [ file_status[:mode],
+        file_status[:link].rjust(max_length_stats[0]+1),
+        file_status[:user_name].rjust(max_length_stats[1]),
+        file_status[:group_name].rjust(max_length_stats[2]+1),
+        file_status[:size].rjust(max_length_stats[3]+1),
+        file_status[:update_time],
+        @file_names[i] ].join(' ')
+    end.join("\n")
   end
 
   def ls_without_l_option(terminal_width)
-    filename_width = file_width(files)
+    filename_width = file_width(@file_names)
     transposed_files = transpose_files(terminal_width)
     transposed_files.map! do |transposed_file|
       transposed_file.map! do |file|
@@ -36,10 +64,10 @@ class LsCommand
   end
 
   def transpose_files(terminal_width)
-    files_count = @files.count
-    files_column(@files, terminal_width)
-    lines = (files_count.to_f / files_column(@files, terminal_width)).ceil
-    separated_files = @files.each_slice(lines).to_a
+    files_count = @file_names.count
+    files_column(@file_names, terminal_width)
+    lines = (files_count.to_f / files_column(@file_names, terminal_width)).ceil
+    separated_files = @file_names.each_slice(lines).to_a
     separated_files[0].zip(*separated_files[1..-1]).map(&:compact)
   end
 

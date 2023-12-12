@@ -2,20 +2,24 @@
 
 require 'minitest/autorun'
 require_relative '../lib/ls_command'
-require_relative '../lib/file_status'
+require_relative '../lib/file_info'
 
 class LsCommandTest < Minitest::Test
   def setup
     options = { a: false, l: false, r: false }
     @ls_command = LsCommand.new('..', options)
+
+    l_option = { a: false, l: true, r: false }
+    @ls_command_with_l = LsCommand.new('..', l_option)
+    @ls_command_06bowling_with_l = LsCommand.new('../06.bowling_object', l_option)
   end
 
   def test_ls_command_files
     a_option = { a: true, l: false, r: false }
-    assert_equal ['.', '..', '.gitkeep', 'fizzbuzz.rb'], LsCommand.new('../01.fizzbuzz', a_option).files
+    assert_equal ['.', '..', '.gitkeep', 'fizzbuzz.rb'], LsCommand.new('../01.fizzbuzz', a_option).file_names
 
     a_r_options = { a: true, l: false, r: true }
-    assert_equal ['fizzbuzz.rb', '.gitkeep', '..', '.'], LsCommand.new('../01.fizzbuzz', a_r_options).files
+    assert_equal ['fizzbuzz.rb', '.gitkeep', '..', '.'], LsCommand.new('../01.fizzbuzz', a_r_options).file_names
   end
 
   def test_ls_files_without_l_terminal_width_86
@@ -53,5 +57,32 @@ class LsCommandTest < Minitest::Test
     README.md               
     TEXT
     assert_equal example, @ls_command.ls_files(47)
+  end
+
+  def test_ls_files_with_l
+    example = <<~TEXT.chomp
+    total 8
+    drwxr-xr-x  4 omisan  staff   128  3 28  2023 01.fizzbuzz
+    drwxr-xr-x  4 omisan  staff   128  3 28  2023 02.calendar
+    drwxr-xr-x  4 omisan  staff   128 11 28 10:57 03.bowling
+    drwxr-xr-x  4 omisan  staff   128  3 28  2023 04.ls
+    drwxr-xr-x  4 omisan  staff   128  3 28  2023 05.wc
+    drwxr-xr-x  7 omisan  staff   224 11 28 10:57 06.bowling_object
+    drwxr-xr-x  6 omisan  staff   192 11 28 16:36 07.ls_object
+    drwxr-xr-x  3 omisan  staff    96  3 28  2023 98.rake
+    drwxr-xr-x  3 omisan  staff    96  3 28  2023 99.wc_object
+    -rw-r--r--  1 omisan  staff  2648  3 28  2023 README.md
+    TEXT
+    assert_equal example, @ls_command_with_l.ls_files(86)
+  end
+
+  def test_ls_files_06bowling_with_l
+    example = <<~TEXT.chomp
+    total 8
+    -rw-r--r--  1 omisan  staff  166 11 28 10:57 bowling.rb
+    drwxr-xr-x  5 omisan  staff  160 11 28 10:57 lib
+    drwxr-xr-x  5 omisan  staff  160 11 28 10:57 test
+    TEXT
+    assert_equal example, @ls_command_06bowling_with_l.ls_files(86)
   end
 end
