@@ -9,15 +9,6 @@ class FileStatusTest < Minitest::Test
     @gitignore = FileInfo.new('../.gitignore')
   end
 
-  def test_file_name
-    assert_equal '01.fizzbuzz', @fizzbuzz.name
-    assert_equal '.gitignore', @gitignore.name
-  end
-
-  def test_file_stat
-    assert_instance_of File::Stat, @fizzbuzz.stat
-  end
-
   def test_file_status
     fizzbuzz_status = { block: 0,
                         mode: 'drwxr-xr-x',
