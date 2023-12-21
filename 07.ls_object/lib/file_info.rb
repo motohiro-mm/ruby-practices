@@ -4,6 +4,7 @@ require 'date'
 require 'etc'
 
 class FileInfo
+  attr_reader :name
 
   def initialize(path)
     @name = File.basename(path)
