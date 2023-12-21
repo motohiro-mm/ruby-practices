@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-class Directory
-  def initialize(options, path)
-    @options = options
-    @path = path
-  end
+require_relative 'file_info'
 
-  def pick_up_path_names
-    pathname = "#{@path}/*"
-    path_names = @options['a'] ? Dir.glob(pathname, File::FNM_DOTMATCH).push("#{@path}/..").sort : Dir.glob(pathname).sort
-    path_names.reverse! if @options['r']
-    path_names
+class Directory
+  attr_reader :files_info
+
+  def initialize(path_names)
+    @files_info = path_names.map { |path_name| FileInfo.new(path_name) }
   end
 end
