@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'file_info'
+require_relative 'directory'
 
 class FormatShort
   def initialize(path_names)
-    @files_name = path_names.map { |path_name| FileInfo.new(path_name).name }
+    @files_name = Directory.new(path_names).files_info.map(&:name)
   end
 
   def output(terminal_width)
