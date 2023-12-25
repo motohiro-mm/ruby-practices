@@ -2,7 +2,7 @@
 
 require_relative 'directory'
 
-class FormatShort
+class ShortFormatter
   def initialize(path_names)
     @files_name = Directory.new(path_names).files_info.map(&:name)
   end

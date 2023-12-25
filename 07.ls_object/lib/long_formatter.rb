@@ -2,7 +2,7 @@
 
 require_relative 'directory'
 
-class FormatLong
+class LongFormatter
   def initialize(path_names)
     @files_status = Directory.new(path_names).files_info.map(&:status)
   end
