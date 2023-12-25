@@ -3,12 +3,12 @@
 require_relative 'directory'
 
 class ShortFormatter
-  def initialize(path_names)
-    @files_name = Directory.new(path_names).files_info.map(&:name)
+  def initialize(directory)
+    @file_names = directory.names
   end
 
   def output(terminal_width)
-    filename_width = file_width(@files_name)
+    filename_width = file_width(@file_names)
     transposed_files = transpose_files(terminal_width)
     transposed_files.map! do |transposed_file|
       transposed_file.map! do |file|
@@ -22,9 +22,9 @@ class ShortFormatter
   end
 
   def transpose_files(terminal_width)
-    files_count = @files_name.count
-    lines = (files_count.to_f / files_column(@files_name, terminal_width)).ceil
-    separated_files = @files_name.each_slice(lines).to_a
+    files_count = @file_names.count
+    lines = (files_count.to_f / files_column(@file_names, terminal_width)).ceil
+    separated_files = @file_names.each_slice(lines).to_a
     separated_files[0].zip(*separated_files[1..]).map(&:compact)
   end
 

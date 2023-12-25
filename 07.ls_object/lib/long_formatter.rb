@@ -3,33 +3,28 @@
 require_relative 'directory'
 
 class LongFormatter
-  def initialize(path_names)
-    @files_status = Directory.new(path_names).files_info.map(&:status)
+  def initialize(directory)
+    @directory = directory
   end
 
   def output(_)
-    max_length_stats = %i[link user_name group_name size].map { |key| max_length_stat(@files_status, key) }
-    "total #{sum_block(@files_status)}\n" + format_files_status(@files_status, max_length_stats)
+    "total #{@directory.sum_blocks}\n" + format_files_info
   end
 
-  def max_length_stat(files_status, key)
-    key_lengths = files_status.map { |file_status| file_status[key].length }
-    key_lengths.max
-  end
+  def format_files_info
+    max_lengths_of_links = @directory.max_length_of_stat(@directory.links)
+    max_lengths_of_user_names = @directory.max_length_of_stat(@directory.user_names)
+    max_lengths_of_group_names = @directory.max_length_of_stat(@directory.group_names)
+    max_lengths_of_sizes = @directory.max_length_of_stat(@directory.sizes)
 
-  def sum_block(files_status)
-    files_status.map { |file_status| file_status[:block] }.sum
-  end
-
-  def format_files_status(files_status, max_length_stats)
-    files_status.map do |file_status|
-      [file_status[:mode],
-       file_status[:link].rjust(max_length_stats[0] + 1),
-       file_status[:user_name].rjust(max_length_stats[1]),
-       file_status[:group_name].rjust(max_length_stats[2] + 1),
-       file_status[:size].rjust(max_length_stats[3] + 1),
-       file_status[:updated_at],
-       file_status[:name]].join(' ')
+    @directory.files_info.map do |file_info|
+      [file_info.mode,
+       file_info.link.rjust(max_lengths_of_links + 1),
+       file_info.user_name.rjust(max_lengths_of_user_names),
+       file_info.group_name.rjust(max_lengths_of_group_names + 1),
+       file_info.size.rjust(max_lengths_of_sizes + 1),
+       file_info.updated_at,
+       file_info.name].join(' ')
     end.join("\n")
   end
 end
