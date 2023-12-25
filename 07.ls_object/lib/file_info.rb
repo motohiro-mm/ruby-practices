@@ -18,7 +18,7 @@ class FileInfo
       user_name: Etc.getpwuid(@stat.uid).name,
       group_name: Etc.getgrgid(@stat.gid).name,
       size: @stat.size.to_s,
-      update_time: file_update_time,
+      updated_at: updated_at,
       name: @name }
   end
 
@@ -36,12 +36,12 @@ class FileInfo
     permission
   end
 
-  def file_update_time
-    file_time = @stat.mtime
-    if Date.today.prev_month(6).to_time > file_time
-      file_time.strftime('%_m %_d  %Y')
+  def updated_at
+    updated_time = @stat.mtime
+    if Date.today.prev_month(6).to_time > updated_time
+      updated_time.strftime('%_m %_d  %Y')
     else
-      file_time.strftime('%_m %_d %H:%M')
+      updated_time.strftime('%_m %_d %H:%M')
     end
   end
 end

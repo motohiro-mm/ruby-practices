@@ -28,7 +28,7 @@ class LongFormatter
        file_status[:user_name].rjust(max_length_stats[1]),
        file_status[:group_name].rjust(max_length_stats[2] + 1),
        file_status[:size].rjust(max_length_stats[3] + 1),
-       file_status[:update_time],
+       file_status[:updated_at],
        file_status[:name]].join(' ')
     end.join("\n")
   end
