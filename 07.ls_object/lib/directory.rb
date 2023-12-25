@@ -9,3 +9,5 @@ class Directory
     @files_info = path_names.map { |path_name| FileInfo.new(path_name) }
   end
 end
+
+p Directory.new(['.'])
