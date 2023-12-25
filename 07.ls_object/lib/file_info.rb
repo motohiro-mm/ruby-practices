@@ -15,7 +15,15 @@ class FileInfo
     @stat.blocks
   end
 
-  FILE_TYPE = { 'file' => '-', 'directory' => 'd', 'link' => 'l', 'fifo' => 'p', 'characterSpecial' => 'c', 'blockSpecial' => 'b', 'socket' => 's' }.freeze
+  FILE_TYPE = {
+    'file' => '-',
+    'directory' => 'd',
+    'link' => 'l',
+    'fifo' => 'p',
+    'characterSpecial' => 'c',
+    'blockSpecial' => 'b',
+    'socket' => 's'
+  }.freeze
   PERMISSION = ['---', '--x', '-w-', '-wx', 'r--', 'r-x', 'rw-', 'rwx'].freeze
 
   def mode
