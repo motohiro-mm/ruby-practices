@@ -24,6 +24,8 @@ class Directory
     keys.zip(maximum_lengths).to_h
   end
 
+  private
+
   def links
     @files_info.map(&:link)
   end

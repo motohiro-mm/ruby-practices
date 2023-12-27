@@ -11,6 +11,8 @@ class LongFormatter
     "total #{@directory.sum_blocks}\n" + format_files_info
   end
 
+  private
+
   def format_files_info
     keys = %i[links user_names group_names sizes]
     max_lengths = @directory.max_lengths(keys)

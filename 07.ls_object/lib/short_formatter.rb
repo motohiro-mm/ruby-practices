@@ -21,6 +21,8 @@ class ShortFormatter
     end.join.chomp
   end
 
+  private
+
   def transpose_files(terminal_width)
     files_count = @file_names.count
     lines = (files_count.to_f / files_column(@file_names, terminal_width)).ceil

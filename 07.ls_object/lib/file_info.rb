@@ -30,13 +30,6 @@ class FileInfo
     FILE_TYPE[@stat.ftype] + [convert_permission(-3, 4, 's') + convert_permission(-2, 2, 's') + convert_permission(-1, 1, 't')].join
   end
 
-  def convert_permission(number, special_number, special_permission)
-    file_permission = @stat.mode.to_s(8).chars
-    permission = PERMISSION[file_permission[number].to_i].chars
-    permission[2] = special_permission if file_permission[-4] == special_number.to_s
-    permission
-  end
-
   def link
     @stat.nlink.to_s
   end
@@ -60,5 +53,14 @@ class FileInfo
     else
       updated_time.strftime('%_m %_d %H:%M')
     end
+  end
+
+  private
+
+  def convert_permission(number, special_number, special_permission)
+    file_permission = @stat.mode.to_s(8).chars
+    permission = PERMISSION[file_permission[number].to_i].chars
+    permission[2] = special_permission if file_permission[-4] == special_number.to_s
+    permission
   end
 end
