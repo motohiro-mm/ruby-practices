@@ -10,10 +10,10 @@ class LsCommand
   end
 
   def output(terminal_width)
-    format.output(terminal_width)
+    formatter.output(terminal_width)
   end
 
-  def format
+  def formatter
     directory = Directory.new(pick_up_paths)
     @options['l'] ? LongFormatter.new(directory) : ShortFormatter.new(directory)
   end
