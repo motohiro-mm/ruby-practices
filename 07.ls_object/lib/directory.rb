@@ -17,8 +17,11 @@ class Directory
     @files_info.map(&:block).sum
   end
 
-  def max_length_of_stat(files_status)
-    files_status.map(&:length).max
+  def max_lengths(keys)
+    maximum_lengths = keys.map do |key|
+      send(key).map(&:length).max
+    end
+    keys.zip(maximum_lengths).to_h
   end
 
   def links
