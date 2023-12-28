@@ -3,7 +3,7 @@
 require 'date'
 require 'etc'
 
-class FileInfo
+class FileDetail
   attr_reader :name
 
   def initialize(path)

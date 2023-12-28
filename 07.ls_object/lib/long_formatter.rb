@@ -8,23 +8,23 @@ class LongFormatter
   end
 
   def output(_)
-    "total #{@directory.sum_blocks}\n" + format_files_info
+    "total #{@directory.sum_blocks}\n" + format_file_details
   end
 
   private
 
-  def format_files_info
+  def format_file_details
     keys = %i[links user_names group_names sizes]
     max_lengths = @directory.max_lengths(keys)
 
-    @directory.files_info.map do |file_info|
-      [file_info.mode,
-       file_info.link.rjust(max_lengths[:links] + 1),
-       file_info.user_name.rjust(max_lengths[:user_names]),
-       file_info.group_name.rjust(max_lengths[:group_names] + 1),
-       file_info.size.rjust(max_lengths[:sizes] + 1),
-       file_info.updated_at,
-       file_info.name].join(' ')
+    @directory.file_details.map do |file_detail|
+      [file_detail.mode,
+       file_detail.link.rjust(max_lengths[:links] + 1),
+       file_detail.user_name.rjust(max_lengths[:user_names]),
+       file_detail.group_name.rjust(max_lengths[:group_names] + 1),
+       file_detail.size.rjust(max_lengths[:sizes] + 1),
+       file_detail.updated_at,
+       file_detail.name].join(' ')
     end.join("\n")
   end
 end

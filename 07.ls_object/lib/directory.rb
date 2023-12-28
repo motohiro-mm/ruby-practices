@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require_relative 'file_info'
+require_relative 'file_detail'
 
 class Directory
-  attr_reader :files_info
+  attr_reader :file_details
 
   def initialize(paths)
-    @files_info = paths.map { |path| FileInfo.new(path) }
+    @file_details = paths.map { |path| FileDetail.new(path) }
   end
 
   def names
-    @files_info.map(&:name)
+    @file_details.map(&:name)
   end
 
   def sum_blocks
-    @files_info.map(&:block).sum
+    @file_details.map(&:block).sum
   end
 
   def max_lengths(keys)
@@ -27,18 +27,18 @@ class Directory
   private
 
   def links
-    @files_info.map(&:link)
+    @file_details.map(&:link)
   end
 
   def user_names
-    @files_info.map(&:user_name)
+    @file_details.map(&:user_name)
   end
 
   def group_names
-    @files_info.map(&:group_name)
+    @file_details.map(&:group_name)
   end
 
   def sizes
-    @files_info.map(&:size)
+    @file_details.map(&:size)
   end
 end
