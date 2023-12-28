@@ -3,13 +3,14 @@
 require_relative 'directory'
 
 class ShortFormatter
-  def initialize(directory)
+  def initialize(directory, terminal_width)
     @file_names = directory.names
+    @terminal_width = terminal_width
   end
 
-  def output(terminal_width)
+  def output
     filename_width = file_width(@file_names)
-    transposed_files = transpose_files(terminal_width)
+    transposed_files = transpose_files(@terminal_width)
     transposed_files.map! do |transposed_file|
       transposed_file.map! do |file|
         if file == transposed_file[-1]

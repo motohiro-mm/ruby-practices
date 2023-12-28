@@ -7,7 +7,7 @@ class LongFormatter
     @directory = directory
   end
 
-  def output(_)
+  def output
     "total #{@directory.sum_blocks}\n" + format_file_details
   end
 
